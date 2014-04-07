@@ -127,7 +127,11 @@ func (context *Context) AddTemplateFilePath(filePath string) (TemplateInfo, erro
 		return TemplateInfo{}, err
 	}
 	fileName := fileInfo.Name()
-	templateInfo, err := context.AddTemplate(fileName, fileContents, "1.0", "", &context.GoAdapter)
+	templateVersion := ""
+	if fileName[len(fileName)-2:] == "lt" {
+		templateVersion = "1.0"
+	}
+	templateInfo, err := context.AddTemplate(fileName, fileContents, templateVersion, "", &context.GoAdapter)
 	if err != nil {
 		return TemplateInfo{}, err
 	}
@@ -156,7 +160,11 @@ func (context *Context) AddTemplateFile(path string, info os.FileInfo, err error
 		}
 		fileName := info.Name()
 		directory := path[0 : len(path)-len(fileName)]
-		_, err = context.AddTemplate(fileName, fileContents, "1.0", directory, &context.GoAdapter)
+		templateVersion := ""
+		if fileName[len(fileName)-2:] == "lt" {
+			templateVersion = "1.0"
+		}
+		_, err = context.AddTemplate(fileName, fileContents, templateVersion, directory, &context.GoAdapter)
 		if err != nil {
 			return err
 		}
@@ -167,8 +175,6 @@ func (context *Context) AddTemplateFile(path string, info os.FileInfo, err error
 func (context *Context) AddTemplate(fileName string, body []byte, version string, directory string, adapter OutputAdapter) (*TemplateInfo, error) {
 	if fileName == "" {
 		return &TemplateInfo{}, errors.New("TemplateInfo must have a filename")
-	} else if version == "" {
-		return &TemplateInfo{}, errors.New("TemplateInfo must have a version")
 	}
 
 	if strings.HasSuffix(fileName, ".lt") == false {
@@ -176,6 +182,7 @@ func (context *Context) AddTemplate(fileName string, body []byte, version string
 		base64.StdEncoding.Encode(encodedBody, body)
 		prefix := []byte("<<levobase64>>")
 		body = append(prefix, encodedBody...)
+		version = LibraryVersion
 	}
 
 	_, err := context.FindTemplate(fileName, directory)

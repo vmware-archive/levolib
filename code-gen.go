@@ -22,7 +22,7 @@ import (
 	"strings"
 )
 
-const templaterVersion string = "1.0"
+const LibraryVersion string = "1.0.0"
 
 type TemplateData struct {
 	PackageName string
@@ -111,7 +111,7 @@ func getBinaryFiles(templateInfo *TemplateInfo) ([]GeneratedFile, error) {
 
 func BeginContext() Context {
 	fmt.Printf("")
-	return Context{PackageName: "com.example", ProjectName: "ExampleProject", TemplaterVersion: templaterVersion, GoAdapter: GoTemplateAdapter{}, TemplateFeatures: make(map[string]bool, 0)}
+	return Context{PackageName: "com.example", ProjectName: "ExampleProject", TemplaterVersion: LibraryVersion, GoAdapter: GoTemplateAdapter{}, TemplateFeatures: make(map[string]bool, 0)}
 }
 
 func GetJSONSchemaAdapter() JSONSchemaAdapter {

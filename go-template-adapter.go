@@ -16,6 +16,7 @@ package levo
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"regexp"
 	"text/template"
@@ -26,6 +27,9 @@ type GoTemplateAdapter struct {
 }
 
 func (self *GoTemplateAdapter) ParseTemplate(templateInfo TemplateInfo) error {
+	if templateInfo.Version != LibraryVersion {
+		return errors.New("Expecting templates with version " + LibraryVersion + ". Template " + templateInfo.FileName + " has version " + templateInfo.Version)
+	}
 	newTemplate := template.New(templateInfo.FileName)
 	addCommonUtilitiesToTemplate(newTemplate)
 	addJavaUtilitiesToTemplate(newTemplate)
