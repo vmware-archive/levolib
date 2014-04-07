@@ -129,7 +129,7 @@ func (context *Context) AddTemplateFilePath(filePath string) (TemplateInfo, erro
 	fileName := fileInfo.Name()
 	templateVersion := ""
 	if fileName[len(fileName)-2:] == "lt" {
-		templateVersion = "1.0"
+		templateVersion = "1.0.0"
 	}
 	templateInfo, err := context.AddTemplate(fileName, fileContents, templateVersion, "", &context.GoAdapter)
 	if err != nil {
@@ -162,7 +162,7 @@ func (context *Context) AddTemplateFile(path string, info os.FileInfo, err error
 		directory := path[0 : len(path)-len(fileName)]
 		templateVersion := ""
 		if fileName[len(fileName)-2:] == "lt" {
-			templateVersion = "1.0"
+			templateVersion = "1.0.0"
 		}
 		_, err = context.AddTemplate(fileName, fileContents, templateVersion, directory, &context.GoAdapter)
 		if err != nil {

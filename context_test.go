@@ -23,7 +23,7 @@ import (
 const testPackageName string = "TestPackage01"
 const testProjectName string = "TestProject01"
 const testLanguage string = "test"
-const testTemplaterVersion string = "1.0"
+const testTemplaterVersion string = "1.0.0"
 const modelName string = "TestModel01"
 const brokenModelName string = "NonExistentModelººº"
 const propertyRemoteIdent string = "TestPropRemote01"
@@ -50,8 +50,8 @@ func SetupContext() Context {
 }
 
 func SetupTemplate() {
-	context.AddTemplate(templateFileName, []byte(templateBody), "1.0", "template", &context.GoAdapter)
-	context.AddTemplate("binary.template", []byte("Lorem ipsum dolor sit amet, consectetur adipiscing elit."), "1.0", "template", &context.GoAdapter)
+	context.AddTemplate(templateFileName, []byte(templateBody), testTemplaterVersion, "template", &context.GoAdapter)
+	context.AddTemplate("binary.template", []byte("Lorem ipsum dolor sit amet, consectetur adipiscing elit."), testTemplaterVersion, "template", &context.GoAdapter)
 }
 
 func SetupModel() {
@@ -181,7 +181,7 @@ func TestContextAddTemplate(testing *testing.T) {
 	originalTemplates := context.Templates
 	contextCopy := context
 
-	if template, err := contextCopy.AddTemplate("", []byte(templateBody), "1.0", "template", &context.GoAdapter); err == nil {
+	if template, err := contextCopy.AddTemplate("", []byte(templateBody), testTemplaterVersion, "template", &context.GoAdapter); err == nil {
 		testing.Error("No error when adding template without filename")
 	} else if reflect.DeepEqual(*template, TemplateInfo{}) == false {
 		testing.Error("Non empty template returned when adding template without filename")
@@ -200,7 +200,7 @@ func TestContextAddTemplate(testing *testing.T) {
 
 	//check that adding a template with duplicate data fails
 	duplicateTemplateCountCheck := len(context.Templates)
-	_, err := context.AddTemplate(templateFileName, []byte(templateBody), "1.0", "template", &context.GoAdapter)
+	_, err := context.AddTemplate(templateFileName, []byte(templateBody), "1.0.0", "template", &context.GoAdapter)
 	if err == nil {
 		testing.Errorf("No error returned when adding template with duplicate data")
 	} else if duplicateTemplateCountCheck != len(context.Templates) {

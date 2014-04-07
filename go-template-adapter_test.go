@@ -56,7 +56,7 @@ func TestParseTemplates(testing *testing.T) {
 func TestGenerateFiles(testing *testing.T) {
 	fmt.Printf("")
 	SetupContext()
-	context.AddTemplate(templateFileName, []byte(templateBody), "1.0", "template", &context.GoAdapter)
+	context.AddTemplate(templateFileName, []byte(templateBody), testTemplaterVersion, "template", &context.GoAdapter)
 	context.AddTemplateFilePath("test-resources/templates/binary.template")
 	context.Templates[0].Adapter = &context.GoAdapter
 	SetupModel()
