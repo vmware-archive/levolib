@@ -21,7 +21,7 @@ import (
 
 const TestBasePackage string = "com.test"
 const TestLanguage string = "java"
-const TestVersion string = "1.0"
+const TestVersion string = "1.0.0"
 const TestProjectName string = "test"
 const TestModelName01 string = "People"
 const TestModelName02 string = "Cats"
