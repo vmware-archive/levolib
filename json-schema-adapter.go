@@ -23,7 +23,6 @@ import (
 type JSONSchemaAdapter struct{}
 
 func (self *JSONSchemaAdapter) ProcessSchemaFile(schemaPath string) (Schema, error) {
-	fmt.Printf("")
 	fileContents, err := ioutil.ReadFile(schemaPath)
 	if err != nil {
 		return Schema{}, err
@@ -32,6 +31,7 @@ func (self *JSONSchemaAdapter) ProcessSchemaFile(schemaPath string) (Schema, err
 }
 
 func (self *JSONSchemaAdapter) ParseModelSchemaString(schemaString []byte) (Schema, error) {
+	fmt.Printf("")
 	var schema Schema
 	err := json.Unmarshal(schemaString, &schema)
 	if err != nil {
@@ -39,6 +39,13 @@ func (self *JSONSchemaAdapter) ParseModelSchemaString(schemaString []byte) (Sche
 	}
 	if err := schema.validate(); err != nil {
 		return Schema{}, err
+	}
+	for modelIndex, model := range schema.Models {
+		for propIndex, prop := range model.Properties {
+			if prop.LocalIdentifier == "" {
+				schema.Models[modelIndex].Properties[propIndex].LocalIdentifier = prop.RemoteIdentifier
+			}
+		}
 	}
 	return schema, nil
 }

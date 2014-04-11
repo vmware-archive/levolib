@@ -44,7 +44,7 @@ type ConfigurationAdapter interface {
 }
 
 type SchemaAdapter interface {
-	ProcessSchemaFile(schemaFile *os.File) (Schema, error)
+	ProcessSchemaFile(schemaFile string) (Schema, error)
 	ProcessSchemaString(schemaString string) (Schema, error)
 }
 
