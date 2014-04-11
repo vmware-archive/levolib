@@ -40,5 +40,12 @@ func (self *JSONSchemaAdapter) ParseModelSchemaString(schemaString []byte) (Sche
 	if err := schema.validate(); err != nil {
 		return Schema{}, err
 	}
+	for _, model := range schema.Models {
+		for _, prop := range model.Properties {
+			if prop.LocalIdentifier == "" {
+				prop.LocalIdentifier = prop.RemoteIdentifier
+			}
+		}
+	}
 	return schema, nil
 }
