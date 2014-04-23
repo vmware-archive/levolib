@@ -281,6 +281,10 @@ func ToCoreDataType(input string) string {
 	return CoreDataTypes()[strings.ToLower(input)]
 }
 
+func ToObjectiveCType(input string) string {
+	return ObjectiveCTypes()[strings.ToLower(input)]
+}
+
 func ToRailsType(prop ModelProperty) string {
 	theType := ""
 	if railsType, ok := RailsTypes()[strings.ToLower(prop.PropertyType)]; ok {
@@ -367,23 +371,34 @@ func JavaTypes() map[string]string {
 func CoreDataTypes() map[string]string {
 	var dict = make(map[string]string)
 	dict["int"] = "Integer 32"
-	dict["Integer"] = "Integer 32"
-	dict["short"] = "Integer 16"
+	dict["integer"] = "Integer 32"
 	dict["short"] = "Integer 16"
 	dict["long"] = "Integer 64"
-	dict["Long"] = "Integer 64"
 	dict["float"] = "Float"
-	dict["Float"] = "Float"
 	dict["boolean"] = "Boolean"
-	dict["Boolean"] = "Boolean"
 	dict["char"] = "String"
-	dict["Character"] = "String"
-	dict["String"] = "String"
+	dict["character"] = "String"
 	dict["string"] = "String"
+	dict["date"] = "Date"
 	dict["byte"] = "NONE"
-	dict["Byte"] = "NONE"
 	dict["void"] = "NONE"
-	dict["Void"] = "NONE"
+	return dict
+}
+
+func ObjectiveCTypes() map[string]string {
+	var dict = make(map[string]string)
+	dict["int"] = "NSNumber"
+	dict["integer"] = "NSNumber"
+	dict["short"] = "NSNumber"
+	dict["long"] = "NSNumber"
+	dict["float"] = "NSNumber"
+	dict["boolean"] = "NSNumber"
+	dict["char"] = "NSString"
+	dict["character"] = "NSString"
+	dict["string"] = "NSString"
+	dict["date"] = "NSDate"
+	dict["byte"] = "NONE"
+	dict["void"] = "NONE"
 	return dict
 }
 
@@ -445,6 +460,7 @@ func addJavaUtilitiesToTemplate(templateObject *template.Template) *template.Tem
 func addObjectiveCUtilitiesToTempalte(templateObject *template.Template) *template.Template {
 	templateObject = templateObject.Funcs(template.FuncMap{
 		"toCoreDataType": ToCoreDataType,
+		"toObjectiveCType" : ToObjectiveCType,
 	})
 	return templateObject
 }
