@@ -266,6 +266,26 @@ func TestRailsType(testing *testing.T) {
 	}
 }
 
+func TestCustomType(test *testing.T) {
+	goodProp := ModelProperty{RemoteIdentifier: "Prop01", PropertyType: "string"}
+	badProp := ModelProperty{RemoteIdentifier: "Prop01", PropertyType: "potato"}
+
+	RegisterCustomType("TestType1")
+	SetCustomType("TestType1", "string", "String1")
+	RegisterCustomType("TestType2")
+	SetCustomType("TestType2", "string", "String2")
+
+	if customType := ToCustomType("TestType1", goodProp); customType != "String1" {
+		test.Errorf("Expecting %v. Got %v", "String1", customType)
+	}
+	if customType := ToCustomType("TestType2", goodProp); customType != "String2" {
+		test.Errorf("Expecting %v. Got %v", "String2", customType)
+	}
+	if customType := ToCustomType("TestType1", badProp); customType != "potato" {
+		test.Errorf("Expecting %v. Got %v", "potato", customType)
+	}
+}
+
 func TestSHA256(testing *testing.T) {
 	if output := SHA256("test"); output != "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3" {
 		testing.Errorf("Expecting %v. Got %v", "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3", output)
