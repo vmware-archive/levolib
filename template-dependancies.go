@@ -26,6 +26,8 @@ import (
 	"text/template"
 )
 
+var CustomType map[string]map[string]string
+
 func Lower(input string) string {
 	fmt.Print("")
 	return strings.ToLower(input)
@@ -299,6 +301,45 @@ func ToRailsType(prop ModelProperty) string {
 	return theType
 }
 
+func RegisterCustomType(customType string) string {
+	if CustomType == nil {
+		CustomType = make(map[string]map[string]string, 0)
+	}
+
+	if _, ok := CustomType[customType]; !ok {
+		CustomType[customType] = make(map[string]string, 0)
+	}
+	return ""
+}
+
+func SetCustomType(customType string, key string, value string) string {
+	if CustomType[customType] == nil {
+		//throw error?
+	} else {
+		CustomType[customType][key] = value
+	}
+	return ""
+}
+
+func IsCustomType(customType string, prop ModelProperty) bool {
+	if CustomType[customType] == nil {
+		return false
+	} else if customMap, ok := CustomType[customType]; !ok {
+		return false
+	} else if _, ok := customMap[prop.PropertyType]; !ok {
+		return false
+	}
+	return true
+}
+
+func ToCustomType(customType string, prop ModelProperty) string {
+	if theType, ok := CustomType[customType][prop.PropertyType]; !ok {
+		return prop.PropertyType
+	} else {
+		return theType
+	}
+}
+
 func SHA256(data string) string {
 	hashWriter := sha1.New()
 	io.WriteString(hashWriter, data)
@@ -427,17 +468,21 @@ func RailsTypes() map[string]string {
 
 func addCommonUtilitiesToTemplate(templateObject *template.Template) *template.Template {
 	templateObject = templateObject.Funcs(template.FuncMap{
-		"eq":        TestEquality,
-		"neq":       TestInequality,
-		"lower":     Lower,
-		"upper":     Upper,
-		"pluralize": Pluralize,
-		"camelcase": Camelcase,
-		"titlecase": Titlecase,
-		"snakecase": Snakecase,
-		"SHA256":    SHA256,
-		"concat":    Concat,
-		"truncate":  Truncate,
+		"eq":                 TestEquality,
+		"neq":                TestInequality,
+		"lower":              Lower,
+		"upper":              Upper,
+		"pluralize":          Pluralize,
+		"camelcase":          Camelcase,
+		"titlecase":          Titlecase,
+		"snakecase":          Snakecase,
+		"SHA256":             SHA256,
+		"concat":             Concat,
+		"truncate":           Truncate,
+		"registerCustomType": RegisterCustomType,
+		"setCustomType":      SetCustomType,
+		"isCustomType":       IsCustomType,
+		"toCustomType":       ToCustomType,
 	})
 	return templateObject
 }
